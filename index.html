@@ -1,50 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>LightWorld</title>
-	<link rel="stylesheet" type="text/css" href="lightworld.css">
-	<link rel="icon" href="Lebby.png">
-	<meta property="og:site_name" content="Lebby">
-	<meta property="og:title" content="Lebby">
-	<meta property="og:description" content="Moderation, leveling, welcomer and many othet features...">
-	<meta property="og:url" content="https://lebby.xyz/">
-	<meta property="og:image" content="https://cdn.discordapp.com/attachments/654712326829899777/734765742175813732/Lebby.png">
+	<title>My First OAuth2 App</title>
 </head>
 <body>
-<header>
-	<div class="l1">
-		<h1 align="left"> Lebby </h1>
+	<div id="info">
+		Hoi!
 	</div>
-	<a href="https://discord.gg/ffXyuc" class="server">Support server</a><br><br><br><br><br><br><br><br><br>
-</header>
-<main>
-	<section>
-		<div class="l2">
-		<h2 align="center">Meet the best discord bot!</h2>
-		<h3 align="center" class="x1">Moderation, leveling, welcomer and many othet features...</h3>
-		<br><br><br><br><br>
-		</div>
-	</section>
-	<footer>
-	<div class="discord">
-	<button class="button1">
-	<a href="https://discord.com/api/oauth2/authorize?client_id=711641781632106588&permissions=8&scope=bot" class="a1">
-	<img src="discord.svg" id="discord">
-	<p class="p2">Add to discord</p></a>
-	</button>
-	</div>
+	<a id="login" style="display: none;" href="your oauth2 url here">Identify Yourself</a>
+	<script>
+		window.onload = () => {
+			const fragment = new URLSearchParams(window.location.hash.slice(1));
 
-	<div class="discord1" align="right">
-	<button class="button2">
-	<a href="  https://docs.lebby.xyz/">
-	<i class="fas fa-book" id="book"></i>
-	<p class="p1">Documentation</p></a>
-	</button>
-	</div>
-	</footer>
-</main>
-<script type="text/javascript" src="lightworld.js"></script>
-<script type="text/javascript" src="https://kit.fontawesome.com/f3b51d26d1.js"
-crossorigin="anonymous"></script>
+			if (fragment.has("access_token")) {
+				const accessToken = fragment.get("access_token");
+				const tokenType = fragment.get("token_type");
+
+				fetch('https://discord.com/api/users/@me', {
+					headers: {
+						authorization: `${tokenType} ${accessToken}`
+					}
+				})
+					.then(res => res.json())
+					.then(response => {
+						const { username, discriminator } = response;
+						document.getElementById('info').innerText += ` ${username}#${discriminator}`;
+					})
+					.catch(console.error);
+
+			}
+			else {
+				document.getElementById('login').style.display = 'block';
+			}
+		}
+	</script>
 </body>
 </html>
